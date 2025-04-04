@@ -3,13 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Preventive Screening Recommendations</title>
+  <title>CAF Preventive Medicine</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
       padding: 0;
       background-color: #f9f9f9;
+    }
+    header {
+      margin-bottom: 20px;
+    }
+    header a {
+      margin-right: 15px;
+      color: #0077cc;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    header a:hover {
+      text-decoration: underline;
     }
     h1, h2 {
       color: #333;
@@ -55,7 +67,14 @@
   </style>
 </head>
 <body>
-  <h1>Preventive Screening Recommendations</h1>
+  <header>
+    <a href="https://www.canada.ca/en/department-national-defence.html" target="_blank">DND</a>
+    <a href="https://www.canada.ca/en/department-national-defence/corporate/organizational-structure/organizational-structure.html" target="_blank">D FHP</a>
+  </header>
+  
+  <h1>CAF Preventive Medicine</h1>
+  <p>This tool suggests best practices for preventive screening guidelines for otherwise healthy adults. Please enter the patient's age and gender below.</p>
+  
   <form id="screeningForm">
     <label for="age">Patient Age:</label>
     <input type="number" id="age" name="age" min="18" required>
@@ -75,66 +94,74 @@
   </div>
   
   <script>
-    // Universal Screening Data (each condition includes a name, guideline info, a placeholder link, and recommendations by age bracket)
+    // Mapping from symbol to descriptive text.
+    const recommendationTextMap = {
+      '✔': 'Strong recommendation',
+      '➕': 'Weak recommendation',
+      '➖': 'Weak recommendation against',
+      '✖': 'Strong recommendation against'
+    };
+
+    // Universal Screening Data
     const universalRecommendations = [
       { 
         name: 'Type 2 Diabetes', 
         guideline: 'Diabetes Canada Guidelines (2018)', 
-        link: '#', 
+        link: 'https://diabetes.ca/Guidelines', 
         brackets: { '18-20': '➖', '21-29': '➖', '30-39': '➖', '40-49': '➕', '50-59': '➕', '60+': '➕' } 
       },
       { 
         name: 'Hypertension', 
         guideline: 'Hypertension Canada Guidelines (2020)', 
-        link: '#', 
+        link: 'https://hypertension.ca/Guidelines', 
         brackets: { '18-20': '✔', '21-29': '✔', '30-39': '✔', '40-49': '✔', '50-59': '✔', '60+': '✔' } 
       },
       { 
         name: 'Obesity (BMI)', 
         guideline: 'Obesity Canada Guidelines (2020)', 
-        link: '#', 
+        link: 'https://obesitycanada.ca/Guidelines', 
         brackets: { '18-20': '✔', '21-29': '✔', '30-39': '✔', '40-49': '✔', '50-59': '✔', '60+': '✔' } 
       },
       { 
         name: 'Hyperlipidemia', 
         guideline: 'CCS Dyslipidemia Guidelines (2021)', 
-        link: '#', 
+        link: 'https://www.ccs.ca/Guidelines', 
         brackets: { '18-20': 'N/A', '21-29': 'N/A', '30-39': 'N/A', '40-49': '✔', '50-59': '✔', '60+': '✔' } 
       },
       { 
         name: 'Chlamydia & Gonorrhea', 
         guideline: 'CTFPHC (2021)', 
-        link: '#', 
+        link: 'https://canadiantaskforce.ca/Guidelines', 
         brackets: { '18-20': '➕', '21-29': '➕', '30-39': '➖', '40-49': '➖', '50-59': '➖', '60+': '➖' } 
       },
       { 
         name: 'Colorectal Cancer', 
         guideline: 'CTFPHC (2016)', 
-        link: '#', 
+        link: 'https://canadiantaskforce.ca/Guidelines', 
         brackets: { '18-20': 'N/A', '21-29': 'N/A', '30-39': 'N/A', '40-49': 'N/A', '50-59': '✔', '60+': '✔' } 
       },
       { 
         name: 'Lung Cancer', 
         guideline: 'CTFPHC (2016)', 
-        link: '#', 
+        link: 'https://canadiantaskforce.ca/Guidelines', 
         brackets: { '18-20': '✖', '21-29': '✖', '30-39': '✖', '40-49': '✖', '50-59': '➕', '60+': '➕' } 
       },
       { 
         name: 'Hepatitis C', 
         guideline: 'CTFPHC (2017)', 
-        link: '#', 
+        link: 'https://canadiantaskforce.ca/Guidelines', 
         brackets: { '18-20': '✖', '21-29': '✖', '30-39': '✖', '40-49': '✖', '50-59': '✖', '60+': '✖' } 
       },
       { 
         name: 'Depression', 
         guideline: 'CTFPHC (2013)', 
-        link: '#', 
+        link: 'https://canadiantaskforce.ca/Guidelines', 
         brackets: { '18-20': '➖', '21-29': '➖', '30-39': '➖', '40-49': '➖', '50-59': '➖', '60+': '➖' } 
       },
       { 
         name: 'Cognitive Impairment', 
         guideline: 'CTFPHC (2016)', 
-        link: '#', 
+        link: 'https://canadiantaskforce.ca/Guidelines', 
         brackets: { '18-20': '➖', '21-29': '➖', '30-39': '➖', '40-49': '➖', '50-59': '➖', '60+': '➖' } 
       }
     ];
@@ -144,31 +171,31 @@
       { 
         name: 'Breast Cancer (Mammography)', 
         guideline: 'CTFPHC (2018)', 
-        link: '#', 
+        link: 'https://canadiantaskforce.ca/Guidelines', 
         brackets: { '18-20': 'N/A', '21-29': 'N/A', '30-39': 'N/A', '40-49': '➖', '50-59': '➕', '60+': '➕' } 
       },
       { 
         name: 'Cervical Cancer (Pap test)', 
         guideline: 'CTFPHC (2013)', 
-        link: '#', 
+        link: 'https://canadiantaskforce.ca/Guidelines', 
         brackets: { '18-20': '✖', '21-29': '✖', '30-39': '✔', '40-49': '✔', '50-59': '✔', '60+': '✔' } 
       },
       { 
         name: 'Asymptomatic Bacteriuria (Pregnancy)', 
         guideline: 'CTFPHC/SOGC (2018)', 
-        link: '#', 
+        link: 'https://www.sogc.org/Guidelines', 
         brackets: { '18-20': '➕', '21-29': '➕', '30-39': '➕', '40-49': '➕', '50-59': '➕', '60+': 'N/A' } 
       },
       { 
         name: 'Depression (Perinatal)', 
         guideline: 'CTFPHC (2019)', 
-        link: '#', 
+        link: 'https://canadiantaskforce.ca/Guidelines', 
         brackets: { '18-20': '➖', '21-29': '➖', '30-39': '➖', '40-49': '➖', '50-59': '➖', '60+': 'N/A' } 
       },
       { 
         name: 'Osteoporosis (Fragility Fractures)', 
         guideline: 'CTFPHC/Osteoporosis Can. (2010/2023)', 
-        link: '#', 
+        link: 'https://osteoporosis.ca/Guidelines', 
         brackets: { '18-20': '➖', '21-29': '➖', '30-39': '➖', '40-49': '➖', '50-59': '➖', '60+': '➕' } 
       }
     ];
@@ -178,13 +205,13 @@
       { 
         name: 'Prostate Cancer (PSA)', 
         guideline: 'CTFPHC (2014)/CUA (2022)', 
-        link: '#', 
+        link: 'https://cua.org/Guidelines', 
         brackets: { '18-20': '➖', '21-29': '➖', '30-39': '➖', '40-49': '➖', '50-59': '➖', '60+': '➖' } 
       },
       { 
         name: 'Abdominal Aortic Aneurysm (Ultrasound)', 
         guideline: 'CTFPHC (2017)', 
-        link: '#', 
+        link: 'https://canadiantaskforce.ca/Guidelines', 
         brackets: { '18-20': '✖', '21-29': '✖', '30-39': '✖', '40-49': '✖', '50-59': '✖', '60+': '➕' } 
       }
     ];
@@ -209,8 +236,15 @@
       // Universal recommendations
       universalRecommendations.forEach(item => {
         const symbol = item.brackets[ageBracket];
+        // Only include if recommendation is for screening
         if (symbol === '✔' || symbol === '➕') {
-          results.push({ category: 'Universal', name: item.name, guideline: item.guideline, symbol });
+          results.push({ 
+            category: 'Universal', 
+            name: item.name, 
+            guideline: item.guideline, 
+            link: item.link,
+            recommendation: recommendationTextMap[symbol]
+          });
         }
       });
       
@@ -219,14 +253,26 @@
         femaleRecommendations.forEach(item => {
           const symbol = item.brackets[ageBracket];
           if (symbol === '✔' || symbol === '➕') {
-            results.push({ category: 'Female-Specific', name: item.name, guideline: item.guideline, symbol });
+            results.push({ 
+              category: 'Female-Specific', 
+              name: item.name, 
+              guideline: item.guideline, 
+              link: item.link,
+              recommendation: recommendationTextMap[symbol]
+            });
           }
         });
       } else if (gender === 'male') {
         maleRecommendations.forEach(item => {
           const symbol = item.brackets[ageBracket];
           if (symbol === '✔' || symbol === '➕') {
-            results.push({ category: 'Male-Specific', name: item.name, guideline: item.guideline, symbol });
+            results.push({ 
+              category: 'Male-Specific', 
+              name: item.name, 
+              guideline: item.guideline, 
+              link: item.link,
+              recommendation: recommendationTextMap[symbol]
+            });
           }
         });
       }
@@ -249,7 +295,7 @@
         const ul = document.createElement('ul');
         recommendations.forEach(rec => {
           const li = document.createElement('li');
-          li.innerHTML = `<strong>${rec.name}</strong> (${rec.guideline}) – Recommendation: ${rec.symbol}`;
+          li.innerHTML = `<strong>${rec.name}</strong> (<a href="${rec.link}" target="_blank">${rec.guideline}</a>) – ${rec.recommendation}`;
           ul.appendChild(li);
         });
         resultsDiv.appendChild(ul);
