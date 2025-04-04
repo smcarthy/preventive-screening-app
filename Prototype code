@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Preventive Screening Recommendations</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 0;
+      background-color: #f9f9f9;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    form {
+      background: #fff;
+      padding: 15px;
+      border-radius: 5px;
+      max-width: 400px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #0077cc;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    button:hover {
+      background-color: #005fa3;
+    }
+    #results {
+      background: #fff;
+      padding: 15px;
+      border-radius: 5px;
+      max-width: 600px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    li {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Preventive Screening Recommendations</h1>
+  <form id="screeningForm">
+    <label for="age">Patient Age:</label>
+    <input type="number" id="age" name="age" min="18" required>
+    
+    <label for="gender">Patient Gender:</label>
+    <select id="gender" name="gender" required>
+      <option value="">Select Gender</option>
+      <option value="female">Female</option>
+      <option value="male">Male</option>
+    </select>
+    
+    <button type="submit">Get Recommendations</button>
+  </form>
+  
+  <div id="results">
+    <!-- Results will be displayed here -->
+  </div>
+  
+  <script>
+    // Universal Screening Data (each condition includes a name, guideline info, a placeholder link, and recommendations by age bracket)
+    const universalRecommendations = [
+      { 
+        name: 'Type 2 Diabetes', 
+        guideline: 'Diabetes Canada Guidelines (2018)', 
+        link: '#', 
+        brackets: { '18-20': '➖', '21-29': '➖', '30-39': '➖', '40-49': '➕', '50-59': '➕', '60+': '➕' } 
+      },
+      { 
+        name: 'Hypertension', 
+        guideline: 'Hypertension Canada Guidelines (2020)', 
+        link: '#', 
+        brackets: { '18-20': '✔', '21-29': '✔', '30-39': '✔', '40-49': '✔', '50-59': '✔', '60+': '✔' } 
+      },
+      { 
+        name: 'Obesity (BMI)', 
+        guideline: 'Obesity Canada Guidelines (2020)', 
+        link: '#', 
+        brackets: { '18-20': '✔', '21-29': '✔', '30-39': '✔', '40-49': '✔', '50-59': '✔', '60+': '✔' } 
+      },
+      { 
+        name: 'Hyperlipidemia', 
+        guideline: 'CCS Dyslipidemia Guidelines (2021)', 
+        link: '#', 
+        brackets: { '18-20': 'N/A', '21-29': 'N/A', '30-39': 'N/A', '40-49': '✔', '50-59': '✔', '60+': '✔' } 
+      },
+      { 
+        name: 'Chlamydia & Gonorrhea', 
+        guideline: 'CTFPHC (2021)', 
+        link: '#', 
+        brackets: { '18-20': '➕', '21-29': '➕', '30-39': '➖', '40-49': '➖', '50-59': '➖', '60+': '➖' } 
+      },
+      { 
+        name: 'Colorectal Cancer', 
+        guideline: 'CTFPHC (2016)', 
+        link: '#', 
+        brackets: { '18-20': 'N/A', '21-29': 'N/A', '30-39': 'N/A', '40-49': 'N/A', '50-59': '✔', '60+': '✔' } 
+      },
+      { 
+        name: 'Lung Cancer', 
+        guideline: 'CTFPHC (2016)', 
+        link: '#', 
+        brackets: { '18-20': '✖', '21-29': '✖', '30-39': '✖', '40-49': '✖', '50-59': '➕', '60+': '➕' } 
+      },
+      { 
+        name: 'Hepatitis C', 
+        guideline: 'CTFPHC (2017)', 
+        link: '#', 
+        brackets: { '18-20': '✖', '21-29': '✖', '30-39': '✖', '40-49': '✖', '50-59': '✖', '60+': '✖' } 
+      },
+      { 
+        name: 'Depression', 
+        guideline: 'CTFPHC (2013)', 
+        link: '#', 
+        brackets: { '18-20': '➖', '21-29': '➖', '30-39': '➖', '40-49': '➖', '50-59': '➖', '60+': '➖' } 
+      },
+      { 
+        name: 'Cognitive Impairment', 
+        guideline: 'CTFPHC (2016)', 
+        link: '#', 
+        brackets: { '18-20': '➖', '21-29': '➖', '30-39': '➖', '40-49': '➖', '50-59': '➖', '60+': '➖' } 
+      }
+    ];
+    
+    // Female-Specific Screening Data
+    const femaleRecommendations = [
+      { 
+        name: 'Breast Cancer (Mammography)', 
+        guideline: 'CTFPHC (2018)', 
+        link: '#', 
+        brackets: { '18-20': 'N/A', '21-29': 'N/A', '30-39': 'N/A', '40-49': '➖', '50-59': '➕', '60+': '➕' } 
+      },
+      { 
+        name: 'Cervical Cancer (Pap test)', 
+        guideline: 'CTFPHC (2013)', 
+        link: '#', 
+        brackets: { '18-20': '✖', '21-29': '✖', '30-39': '✔', '40-49': '✔', '50-59': '✔', '60+': '✔' } 
+      },
+      { 
+        name: 'Asymptomatic Bacteriuria (Pregnancy)', 
+        guideline: 'CTFPHC/SOGC (2018)', 
+        link: '#', 
+        brackets: { '18-20': '➕', '21-29': '➕', '30-39': '➕', '40-49': '➕', '50-59': '➕', '60+': 'N/A' } 
+      },
+      { 
+        name: 'Depression (Perinatal)', 
+        guideline: 'CTFPHC (2019)', 
+        link: '#', 
+        brackets: { '18-20': '➖', '21-29': '➖', '30-39': '➖', '40-49': '➖', '50-59': '➖', '60+': 'N/A' } 
+      },
+      { 
+        name: 'Osteoporosis (Fragility Fractures)', 
+        guideline: 'CTFPHC/Osteoporosis Can. (2010/2023)', 
+        link: '#', 
+        brackets: { '18-20': '➖', '21-29': '➖', '30-39': '➖', '40-49': '➖', '50-59': '➖', '60+': '➕' } 
+      }
+    ];
+    
+    // Male-Specific Screening Data
+    const maleRecommendations = [
+      { 
+        name: 'Prostate Cancer (PSA)', 
+        guideline: 'CTFPHC (2014)/CUA (2022)', 
+        link: '#', 
+        brackets: { '18-20': '➖', '21-29': '➖', '30-39': '➖', '40-49': '➖', '50-59': '➖', '60+': '➖' } 
+      },
+      { 
+        name: 'Abdominal Aortic Aneurysm (Ultrasound)', 
+        guideline: 'CTFPHC (2017)', 
+        link: '#', 
+        brackets: { '18-20': '✖', '21-29': '✖', '30-39': '✖', '40-49': '✖', '50-59': '✖', '60+': '➕' } 
+      }
+    ];
+    
+    // Determine the age bracket based on input age
+    function getAgeBracket(age) {
+      if (age >= 18 && age <= 20) return '18-20';
+      if (age >= 21 && age <= 29) return '21-29';
+      if (age >= 30 && age <= 39) return '30-39';
+      if (age >= 40 && age <= 49) return '40-49';
+      if (age >= 50 && age <= 59) return '50-59';
+      if (age >= 60) return '60+';
+      return null;
+    }
+    
+    // Gather recommendations based on age and gender
+    function getRecommendations(age, gender) {
+      const ageBracket = getAgeBracket(age);
+      if (!ageBracket) return [];
+      let results = [];
+      
+      // Universal recommendations
+      universalRecommendations.forEach(item => {
+        const symbol = item.brackets[ageBracket];
+        if (symbol === '✔' || symbol === '➕') {
+          results.push({ category: 'Universal', name: item.name, guideline: item.guideline, symbol });
+        }
+      });
+      
+      // Gender-specific recommendations
+      if (gender === 'female') {
+        femaleRecommendations.forEach(item => {
+          const symbol = item.brackets[ageBracket];
+          if (symbol === '✔' || symbol === '➕') {
+            results.push({ category: 'Female-Specific', name: item.name, guideline: item.guideline, symbol });
+          }
+        });
+      } else if (gender === 'male') {
+        maleRecommendations.forEach(item => {
+          const symbol = item.brackets[ageBracket];
+          if (symbol === '✔' || symbol === '➕') {
+            results.push({ category: 'Male-Specific', name: item.name, guideline: item.guideline, symbol });
+          }
+        });
+      }
+      
+      return results;
+    }
+    
+    // Form submission handler
+    document.getElementById('screeningForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const age = parseInt(document.getElementById('age').value, 10);
+      const gender = document.getElementById('gender').value;
+      const recommendations = getRecommendations(age, gender);
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '<h2>Screening Recommendations</h2>';
+      
+      if (recommendations.length === 0) {
+        resultsDiv.innerHTML += '<p>No screening recommendations applicable at this time.</p>';
+      } else {
+        const ul = document.createElement('ul');
+        recommendations.forEach(rec => {
+          const li = document.createElement('li');
+          li.innerHTML = `<strong>${rec.name}</strong> (${rec.guideline}) – Recommendation: ${rec.symbol}`;
+          ul.appendChild(li);
+        });
+        resultsDiv.appendChild(ul);
+      }
+    });
+  </script>
+</body>
+</html>
