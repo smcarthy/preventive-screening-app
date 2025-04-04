@@ -16,13 +16,14 @@
       color: #333;
       line-height: 1.6;
     }
+    /* Links */
     a {
-      color: #ffffff;
       text-decoration: none;
     }
     a:hover {
       text-decoration: underline;
     }
+    
     /* Header */
     header {
       background-color: #003366;
@@ -32,10 +33,12 @@
       justify-content: center;
     }
     header nav a {
+      color: #ffffff;
       margin: 0 15px;
       font-weight: 500;
       font-size: 1rem;
     }
+    
     /* Main Container */
     .container {
       max-width: 800px;
@@ -51,6 +54,16 @@
       font-size: 1.1rem;
       margin-bottom: 30px;
     }
+    
+    /* Hero Image */
+    .hero-image {
+      display: block;
+      margin: 20px auto;
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    
     /* Form Styling */
     form {
       background: #ffffff;
@@ -89,6 +102,7 @@
     form button:hover {
       background-color: #004c87;
     }
+    
     /* Results Styling */
     #results {
       background: #ffffff;
@@ -109,6 +123,14 @@
     #results li:last-child {
       border-bottom: none;
     }
+    /* Ensure links in the results are visible */
+    #results a {
+      color: #005fa3;
+    }
+    #results a:hover {
+      color: #003366;
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -121,8 +143,14 @@
   
   <div class="container">
     <h1>CAF Preventive Medicine</h1>
+    <img 
+      src="https://via.placeholder.com/800x400?text=CAF+Soldier" 
+      alt="CAF soldier receiving healthcare" 
+      class="hero-image"
+    >
     <p class="intro">
-      This tool suggests best practices for preventive screening guidelines for otherwise healthy adults. Please enter the patient's age and gender below.
+      This tool suggests best practices for preventive screening guidelines for otherwise healthy adults. 
+      Please enter the patient's age and gender below.
     </p>
   
     <form id="screeningForm">
@@ -287,7 +315,7 @@
       // Universal recommendations
       universalRecommendations.forEach(item => {
         const symbol = item.brackets[ageBracket];
-        // Only include if recommendation is for screening
+        // Only include if recommendation is FOR screening
         if (symbol === '✔' || symbol === '➕') {
           results.push({ 
             category: 'Universal', 
@@ -345,8 +373,12 @@
       } else {
         const ul = document.createElement('ul');
         recommendations.forEach(rec => {
-          const li = document.createElement('li');
-          li.innerHTML = `<strong>${rec.name}</strong> (<a href="${rec.link}" target="_blank">${rec.guideline}</a>) – ${rec.recommendation}`;
+          // Format: Condition – Strength of recommendation (Guideline name, year, hyperlink)
+          li = document.createElement('li');
+          li.innerHTML = `
+            <strong>${rec.name}</strong> – ${rec.recommendation} 
+            (<a href="${rec.link}" target="_blank">${rec.guideline}</a>)
+          `;
           ul.appendChild(li);
         });
         resultsDiv.appendChild(ul);
