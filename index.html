@@ -32,12 +32,6 @@
       align-items: center;
       justify-content: center;
     }
-    header nav a {
-      color: #ffffff;
-      margin: 0 15px;
-      font-weight: 500;
-      font-size: 1rem;
-    }
     
     /* Main Container */
     .container {
@@ -135,16 +129,13 @@
 </head>
 <body>
   <header>
-    <nav>
-      <a href="https://www.canada.ca/en/department-national-defence.html" target="_blank">DND</a>
-      <a href="https://www.canada.ca/en/department-national-defence/corporate/organizational-structure/organizational-structure.html" target="_blank">D FHP</a>
-    </nav>
+    <!-- Blue banner remains without links -->
   </header>
   
   <div class="container">
     <h1>CAF Preventive Medicine</h1>
     <img 
-      src="./IMG_7388.jpeg" 
+      src="IMG_7388.jpeg" 
       alt="CAF soldier receiving healthcare" 
       class="hero-image"
     >
@@ -373,8 +364,8 @@
       } else {
         const ul = document.createElement('ul');
         recommendations.forEach(rec => {
-          // Format: Condition – Strength of recommendation (Guideline name, year, hyperlink)
-          li = document.createElement('li');
+          // Format: Condition – Strength (Guideline name, year, hyperlink)
+          const li = document.createElement('li');
           li.innerHTML = `
             <strong>${rec.name}</strong> – ${rec.recommendation} 
             (<a href="${rec.link}" target="_blank">${rec.guideline}</a>)
